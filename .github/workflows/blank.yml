@@ -1,0 +1,28 @@
+name: Build APK Alpha Gym
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar proyecto
+        uses: actions/checkout@v4
+
+      - name: Instalar herramientas
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip git zip unzip openjdk-17-jdk
+          pip install buildozer cython==0.29.37
+
+      - name: Compilar APK
+        run: |
+          buildozer android debug
+
+      - name: Guardar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Alpha-Gym-APK
+          path: bin/*.apk
